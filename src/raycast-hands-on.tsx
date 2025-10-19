@@ -14,6 +14,7 @@ export default function TodoList() {
             setTodos(loadedTodos)
             setIsLoading(false)
         }
+        fetchTodos()
     }, [])
 
     async function addTodo(values: { title: string; description: string}) {
