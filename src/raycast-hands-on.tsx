@@ -1,4 +1,4 @@
-import { ActionPanel, Action, Form, showToast, List as RaycastList, Icon, Toast} from "@raycast/api"
+import { ActionPanel, Action, Form, showToast, List, Icon, Toast} from "@raycast/api"
 import { useState, useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { Todo } from "./types"
@@ -58,10 +58,10 @@ export default function TodoList() {
     }
 
     return (
-        <RaycastList isLoading={isLoading}>
-            <RaycastList.Section title="Todo List">
+        <List isLoading={isLoading}>
+            <List.Section title="Todo List">
                 {todos.map((todo) => (
-                    <RaycastList.Item
+                    <List.Item
                         key={todo.id}
                         title={todo.title}
                         subtitle={todo.description}
@@ -81,7 +81,52 @@ export default function TodoList() {
                         }
                     />
                 ))}
-            </RaycastList.Section>
-        </RaycastList>
+            </List.Section>
+
+            <List.Section title="Add New Todo">
+                <List.Item
+                    title="Create New Todo"
+                    icon={Icon.Plus}
+                    actions={
+                        <ActionPanel>
+                            <Action.Push
+                                title="Add Todo"
+                                target={
+                                    <TodoForm
+                                        onSubmit={(values) => addTodo(values)}
+                                    />
+                                }
+                            />
+                        </ActionPanel>
+                    }
+                />
+            </List.Section>
+        </List>
+    )
+}
+
+function TodoForm({ onSubmit }: { onSubmit: (values: { title: string; description: string }) => void}) {
+    return (
+        <Form
+            actions={
+                <ActionPanel>
+                    <Action.SubmitForm
+                        title="Add Todo"
+                        onSubmit={onSubmit}
+                    />
+                </ActionPanel>
+            }
+        >
+            <Form.TextField
+                id="title"
+                title="Title"
+                placeholder="Enter todo title"
+            />
+            <Form.TextArea
+                id="description"
+                title="Description"
+                placeholder="Enter todo description (optional)"
+            />
+        </Form>
     )
 }
